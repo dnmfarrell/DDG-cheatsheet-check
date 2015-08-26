@@ -2,11 +2,11 @@
 
 =head1 NAME
 
-cheatsheet_check - checks DuckDuckGo static cheatsheets for correctness
+C<cheatsheet_check> - checks DuckDuckGo JSON cheatsheets for correctness
 
 =head1 SYNOPSIS
 
-    $ cheatsheet_check /path/to/cheatsheet.json
+    $ ./cheatsheet_check /path/to/cheatsheet.json
 
         # Subtest: file
         ok 1 - filepath argument is present
@@ -42,7 +42,7 @@ cheatsheet_check - checks DuckDuckGo static cheatsheets for correctness
 
 =over 4
 
-=item * Perl
+=item * L<Perl|http://perl.org>
 
 =item * Perl module L<JSON|https://metacpan.org/pod/JSON>
 
