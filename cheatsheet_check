@@ -1,0 +1,39 @@
+#!/usr/bin/env perl
+use Test::More;
+use File::Fetch;
+use JSON;
+
+my $json;
+
+subtest 'file' => sub {
+  ok scalar @ARGV, 'filepath argument is present';
+
+  BAIL_OUT('Error reading file') unless -e $ARGV[0];
+  ok 1,  'file exists'; # checked ^
+
+  ok $ARGV[0] !~ /^[^\s|_]+?\.json$/,'filename is appropriate';
+  ok my $content = do { local $/ = undef;<> }, 'file content can be read';
+  ok $json = decode_json($content), 'content is valid JSON';
+};
+
+subtest 'headers' => sub {
+  ok exists $json->{id} && $json->{id}, 'has id';
+  ok exists $json->{name} && $json->{name}, 'has name';
+  ok exists $json->{description} && $json->{description}, 'has description';
+};
+
+subtest 'metadata' => sub {
+  ok exists $json->{metadata}, 'has metadata';
+  ok exists $json->{metadata}{sourceName}, 'has metadata sourceName';
+  ok exists $json->{metadata}{sourceUrl}, 'has metadata sourceUrl';
+  ok my $url = $json->{metadata}{sourceUrl}, 'sourceUrl is not undef';
+  ok my $ff = File::Fetch->new(uri => $url), 'create File::Fetch object using sourceUrl';
+  ok $ff->fetch(to => \my $tmp), 'fetch sourceUrl successfully';
+};
+
+subtest 'sections' => sub {
+  ok exists $json->{section_order}, 'has section_order';
+  ok exists $json->{sections}, 'has sections';
+};
+
+done_testing;
