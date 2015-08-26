@@ -38,6 +38,16 @@ cheatsheet_check - checks DuckDuckGo static cheatsheets for correctness
     ok 4 - sections
     1..4
 
+=head1 DEPENDENCIES
+
+=over 4
+
+=item * Perl
+
+=item * Perl module L<JSON|https://metacpan.org/pod/JSON>
+
+=back
+
 =head1 VERSION
 
 0.01

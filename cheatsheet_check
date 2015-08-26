@@ -5,10 +5,10 @@ use JSON;
 
 my $json;
 
-subtest 'file' => sub {
-  ok scalar @ARGV, 'filepath argument is present';
+die "\nUsage:\n\n  ./cheatsheet_check /path/to/cheatsheet.json\n\n" unless scalar @ARGV;
 
-  BAIL_OUT('Error reading file') unless -e $ARGV[0];
+subtest 'file' => sub {
+  BAIL_OUT("Error reading file $ARGV[0]") unless -e $ARGV[0];
   ok 1,  'file exists'; # checked ^
 
   ok $ARGV[0] !~ /^[^\s|_]+?\.json$/,'filename is appropriate';
