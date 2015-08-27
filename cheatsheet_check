@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 use Test::More;
-use File::Fetch;
+use HTTP::Tiny;
 use JSON;
 
 my $json;
@@ -27,13 +27,37 @@ subtest 'metadata' => sub {
   ok exists $json->{metadata}{sourceName}, 'has metadata sourceName';
   ok exists $json->{metadata}{sourceUrl}, 'has metadata sourceUrl';
   ok my $url = $json->{metadata}{sourceUrl}, 'sourceUrl is not undef';
-  ok my $ff = File::Fetch->new(uri => $url), 'create File::Fetch object using sourceUrl';
-  ok $ff->fetch(to => \my $tmp), 'fetch sourceUrl successfully';
+
+  SKIP: {
+    skip 'sourceUrl is missing, unable to check it', 1 unless $url;
+    ok(HTTP::Tiny->new->get($url)->{success}, 'fetch sourceUrl');
+  };
 };
 
 subtest 'sections' => sub {
-  ok exists $json->{section_order}, 'has section_order';
-  ok exists $json->{sections}, 'has sections';
+  ok my $order = $json->{section_order}, 'has section_order';
+  is ref $order, 'ARRAY', 'section_order is an array of section names';
+  ok my $sections = $json->{sections}, 'has sections';
+  is ref $sections, 'HASH', 'sections is a hash of section key/pairs';
+
+  for my $section_name (@$order)
+  {
+    ok my $section = $sections->{$section_name}, "'$section_name' exists in sections";
+  }
+
+  for my $section_name (keys %$sections)
+  {
+    ok grep(/\Q$section_name\E/, @$order), "'$section_name' exists in section_order";
+    is ref $sections->{$section_name}, 'ARRAY', "'$section_name' is an array";
+
+    my $entry_count = 0;
+    for my $entry (@{$sections->{$section_name}})
+    {
+      ok exists $entry->{key}, "'$section_name' entry: $entry_count has a key";
+      ok exists $entry->{val}, "'$section_name' entry: $entry_count has a val";
+      $entry_count++;
+    }
+  }
 };
 
 done_testing;
