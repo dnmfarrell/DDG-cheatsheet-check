@@ -11,7 +11,10 @@ subtest 'file' => sub {
   BAIL_OUT("Error reading file $ARGV[0]") unless -e $ARGV[0];
   ok 1,  'file exists'; # checked ^
 
-  ok $ARGV[0] !~ /^[^\s|_]+?\.json$/,'filename is appropriate';
+  my @filepath = split '/', $ARGV[0];
+  my $filename = pop @filepath;
+
+  like $filename, qr /^[^\s|_]+?\.json$/,'filename is appropriate';
   ok my $content = do { local $/ = undef;<> }, 'file content can be read';
   ok $json = decode_json($content), 'content is valid JSON';
 };
