@@ -38,19 +38,22 @@ C<cheatsheet_check> - checks DuckDuckGo JSON cheatsheets for correctness
     ok 4 - sections
     1..4
 
+
+See my L<article|http://perltricks.com/article/190/2015/8/28/Check-your-DuckDuckGo-cheatsheets-with-Perl> for more background and information on the tool.
+
 =head1 DEPENDENCIES
 
 =over 4
 
 =item * L<Perl|http://perl.org>
 
-=item * Perl module L<JSON|https://metacpan.org/pod/JSON>
+=item * Perl modules L<JSON|https://metacpan.org/pod/JSON> and L<HTTP::Tiny|https://metacpan.org/pod/HTTP::Tiny>
 
 =back
 
 =head1 VERSION
 
-0.01
+0.02
 
 =head1 AUTHOR
 
